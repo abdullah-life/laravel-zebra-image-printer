@@ -12,8 +12,8 @@ A minimal Laravel package for printing PNG images to Zebra thermal printers usin
 
 ## Requirements
 
-- PHP 8.0+
-- Laravel 9.x, 10.x, or 11.x
+- PHP 7.4+
+- Laravel 9.x, 10.x, 11.x, or 12.x
 - ImageMagick (`convert` command)
 
 ## Installation
