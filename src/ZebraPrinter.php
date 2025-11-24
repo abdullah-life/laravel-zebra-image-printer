@@ -37,12 +37,33 @@ class ZebraPrinter
      */
     public function convert(string $imagePath, float $marginCm = 0): string
     {
-        if (!file_exists($imagePath)) {
+        $localPath = $imagePath;
+        $isRemote = false;
+        $tempDownload = null;
+
+        // Check if it's a remote URL
+        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+            $isRemote = true;
+            $tempDownload = sys_get_temp_dir() . '/zpl_download_' . date('YmdHis') . '_' . uniqid() . '.png';
+
+            $imageData = @file_get_contents($imagePath);
+            if ($imageData === false) {
+                throw new Exception("Failed to download image from URL: $imagePath");
+            }
+
+            file_put_contents($tempDownload, $imageData);
+            $localPath = $tempDownload;
+        }
+
+        if (!file_exists($localPath)) {
             throw new Exception("Image file not found: $imagePath");
         }
 
-        $imageInfo = getimagesize($imagePath);
+        $imageInfo = getimagesize($localPath);
         if ($imageInfo === false) {
+            if ($tempDownload && file_exists($tempDownload)) {
+                @unlink($tempDownload);
+            }
             throw new Exception("Failed to read image: $imagePath");
         }
 
@@ -60,7 +81,7 @@ class ZebraPrinter
         // Use ImageMagick to convert to 1-bit monochrome BMP
         $convertCmd = sprintf(
             'convert %s -resize %dx%d\! -colorspace Gray -dither FloydSteinberg -colors 2 -monochrome -type bilevel BMP3:%s 2>&1',
-            escapeshellarg($imagePath),
+            escapeshellarg($localPath),
             $targetWidth,
             $targetHeight,
             escapeshellarg($tempBmp)
@@ -70,11 +91,19 @@ class ZebraPrinter
 
         if ($returnCode !== 0 || !file_exists($tempBmp)) {
             @unlink($tempBmp);
+            if ($tempDownload && file_exists($tempDownload)) {
+                @unlink($tempDownload);
+            }
             throw new Exception("Image conversion failed. Install ImageMagick: sudo apt-get install imagemagick");
         }
 
         $hexData = $this->bmpToHex($tempBmp, $targetWidth, $targetHeight);
         @unlink($tempBmp);
+
+        // Cleanup downloaded file
+        if ($tempDownload && file_exists($tempDownload)) {
+            @unlink($tempDownload);
+        }
 
         $bytesPerRow = (int)(($targetWidth + 7) / 8);
         $totalBytes = $bytesPerRow * $targetHeight;

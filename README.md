@@ -5,6 +5,7 @@ A minimal Laravel package for printing PNG images to Zebra thermal printers usin
 ## Features
 
 - Print PNG images directly to Zebra thermal printers
+- Support for local files and remote URLs
 - Configurable margins, DPI, and darkness
 - Full page width with automatic scaling
 - Direct thermal and thermal transfer support
@@ -54,8 +55,11 @@ sudo apt-get install imagemagick
 ```php
 use AbdullahLife\ZebraImagePrinter\Facades\ZebraPrinter;
 
-// Print with 1cm margin
+// Print local file with 1cm margin
 ZebraPrinter::print('/path/to/label.png', 1);
+
+// Print remote URL
+ZebraPrinter::print('https://example.com/label.png', 1);
 
 // Print with custom margin
 ZebraPrinter::print('/path/to/label.png', 0.5);
