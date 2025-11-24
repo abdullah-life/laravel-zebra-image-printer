@@ -151,15 +151,20 @@ class ZebraPrinter
         $ip = $printerIp ?? $this->printerIp;
         $port = $printerPort ?? $this->printerPort;
 
+        // Reset printer to ZPL mode first (separate connection)
+        $resetSocket = @fsockopen($ip, $port, $errno, $errstr, 5);
+        if ($resetSocket) {
+            fwrite($resetSocket, "^XA^JUS^XZ\n");
+            fclose($resetSocket);
+            usleep(200000); // Wait 200ms for reset
+        }
+
+        // Now send the actual ZPL
         $socket = @fsockopen($ip, $port, $errno, $errstr, 5);
 
         if (!$socket) {
             throw new Exception("Failed to connect to printer at {$ip}:{$port} - {$errstr} ({$errno})");
         }
-
-        // Reset printer to ZPL mode first
-        fwrite($socket, "^XA^JUS^XZ\n");
-        usleep(100000); // Wait 100ms for reset
 
         $bytesWritten = fwrite($socket, $zpl);
         fclose($socket);
