@@ -159,8 +159,8 @@ class ZebraPrinter
      */
     private function buildZpl(int $width, int $height, int $marginDots, int $totalBytes, int $bytesPerRow, string $hexData): string
     {
-        // Label length should include image height + both top and bottom margins
-        $labelLength = $height + ($marginDots * 2);
+        // Label length is just the image height (no top/bottom margins)
+        $labelLength = $height;
 
         $zpl = "^XA\n";
         $zpl .= "^MNM\n";  // Media tracking continuous (no gaps)
@@ -169,7 +169,7 @@ class ZebraPrinter
         $zpl .= "^PW{$this->pageWidthDots}\n";
         $zpl .= "^LL{$labelLength}\n";
         $zpl .= "^LH0,0\n";  // Label home position
-        $zpl .= "^FO{$marginDots},{$marginDots}\n";
+        $zpl .= "^FO{$marginDots},0\n";  // Only left margin, start at top
         $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
         $zpl .= "^FS\n";
         $zpl .= "^PQ1\n";  // Print quantity 1
