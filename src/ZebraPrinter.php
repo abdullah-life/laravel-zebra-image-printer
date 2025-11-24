@@ -111,7 +111,7 @@ class ZebraPrinter
                             $pixelByte = ord($data[$bytePos]);
                             $pixelBit = ($pixelByte >> $bitPos) & 1;
 
-                            if ($pixelBit == 0) {
+                            if ($pixelBit == 1) {
                                 $byte |= (1 << (7 - $bit));
                             }
                         }
