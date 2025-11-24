@@ -163,16 +163,14 @@ class ZebraPrinter
         $labelLength = $height;
 
         $zpl = "^XA\n";
-        $zpl .= "^MNM\n";  // Media tracking continuous (no gaps)
         $zpl .= ($this->directThermal ? "^MTD\n" : "^MTT\n");
         $zpl .= "^MD{$this->darkness}\n";
         $zpl .= "^PW{$this->pageWidthDots}\n";
         $zpl .= "^LL{$labelLength}\n";
-        $zpl .= "^LH0,0\n";  // Label home position
+        $zpl .= "^PR8\n";  // Print speed 8 inches/sec (maximum speed)
         $zpl .= "^FO{$marginDots},0\n";  // Only left margin, start at top
         $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
         $zpl .= "^FS\n";
-        $zpl .= "^PQ1\n";  // Print quantity 1
         $zpl .= "^XZ\n";
 
         return $zpl;
