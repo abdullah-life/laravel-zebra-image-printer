@@ -159,11 +159,14 @@ class ZebraPrinter
      */
     private function buildZpl(int $width, int $height, int $marginDots, int $totalBytes, int $bytesPerRow, string $hexData): string
     {
+        // Label length should include image height + both top and bottom margins
+        $labelLength = $height + ($marginDots * 2);
+
         $zpl = "^XA\n";
         $zpl .= ($this->directThermal ? "^MTD\n" : "^MTT\n");
         $zpl .= "^MD{$this->darkness}\n";
         $zpl .= "^PW{$this->pageWidthDots}\n";
-        $zpl .= "^LL" . ($height + $marginDots) . "\n";
+        $zpl .= "^LL{$labelLength}\n";
         $zpl .= "^FO{$marginDots},{$marginDots}\n";
         $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
         $zpl .= "^FS\n";
