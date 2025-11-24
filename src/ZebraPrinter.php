@@ -57,9 +57,9 @@ class ZebraPrinter
         $tempDir = sys_get_temp_dir();
         $tempBmp = $tempDir . '/zpl_' . $timestamp . '.bmp';
 
-        // Use ImageMagick to convert
+        // Use ImageMagick to convert to 1-bit monochrome BMP
         $convertCmd = sprintf(
-            'convert %s -resize %dx%d\! -colorspace Gray -colors 2 -depth 1 BMP:%s 2>&1',
+            'convert %s -resize %dx%d\! -colorspace Gray -dither FloydSteinberg -colors 2 -monochrome -type bilevel BMP3:%s 2>&1',
             escapeshellarg($imagePath),
             $targetWidth,
             $targetHeight,
