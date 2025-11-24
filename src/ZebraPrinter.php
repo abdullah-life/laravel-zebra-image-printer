@@ -163,6 +163,7 @@ class ZebraPrinter
         $labelLength = $height + ($marginDots * 2);
 
         $zpl = "^XA\n";
+        $zpl .= "^MNM\n";  // Media tracking continuous (no gaps)
         $zpl .= ($this->directThermal ? "^MTD\n" : "^MTT\n");
         $zpl .= "^MD{$this->darkness}\n";
         $zpl .= "^PW{$this->pageWidthDots}\n";
