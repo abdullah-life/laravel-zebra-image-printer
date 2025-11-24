@@ -70,9 +70,10 @@ class ZebraPrinter
         $originalWidth = $imageInfo[0];
         $originalHeight = $imageInfo[1];
 
-        $marginDots = (int)($marginCm * 10 * $this->dpi / 25.4);
-        $targetWidth = $this->pageWidthDots - ($marginDots * 2);
+        // Ignore margin parameter - use full page width
+        $targetWidth = $this->pageWidthDots;
         $targetHeight = (int)($targetWidth * ($originalHeight / $originalWidth));
+        $marginDots = 0;
 
         $timestamp = date('YmdHis') . '_' . uniqid();
         $tempDir = sys_get_temp_dir();
@@ -168,7 +169,7 @@ class ZebraPrinter
         $zpl .= "^PW{$this->pageWidthDots}\n";
         $zpl .= "^LL{$labelLength}\n";
         $zpl .= "^PR8\n";  // Print speed 8 inches/sec (maximum speed)
-        $zpl .= "^FO{$marginDots},0\n";  // Only left margin, start at top
+        $zpl .= "^FO0,0\n";  // No margins - start at 0,0
         $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
         $zpl .= "^FS\n";
         $zpl .= "^XZ\n";
