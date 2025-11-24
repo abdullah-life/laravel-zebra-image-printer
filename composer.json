@@ -1,0 +1,33 @@
+{
+    "name": "abdullah-life/laravel-zebra-image-printer",
+    "description": "Laravel package for printing PNG images to Zebra thermal printers via ZPL",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdullah",
+            "email": "abdullah@life.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^9.0|^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AbdullahLife\\ZebraImagePrinter\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AbdullahLife\\ZebraImagePrinter\\ZebraImagePrinterServiceProvider"
+            ],
+            "aliases": {
+                "ZebraPrinter": "AbdullahLife\\ZebraImagePrinter\\Facades\\ZebraPrinter"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
