@@ -167,9 +167,11 @@ class ZebraPrinter
         $zpl .= "^MD{$this->darkness}\n";
         $zpl .= "^PW{$this->pageWidthDots}\n";
         $zpl .= "^LL{$labelLength}\n";
+        $zpl .= "^LH0,0\n";  // Label home position
         $zpl .= "^FO{$marginDots},{$marginDots}\n";
         $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
         $zpl .= "^FS\n";
+        $zpl .= "^PQ1\n";  // Print quantity 1
         $zpl .= "^XZ\n";
 
         return $zpl;
