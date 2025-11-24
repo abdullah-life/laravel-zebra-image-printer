@@ -157,6 +157,10 @@ class ZebraPrinter
             throw new Exception("Failed to connect to printer at {$ip}:{$port} - {$errstr} ({$errno})");
         }
 
+        // Reset printer to ZPL mode first
+        fwrite($socket, "^XA^JUS^XZ\n");
+        usleep(100000); // Wait 100ms for reset
+
         $bytesWritten = fwrite($socket, $zpl);
         fclose($socket);
 
