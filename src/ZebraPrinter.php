@@ -163,16 +163,16 @@ class ZebraPrinter
         // Label length is just the image height (no top/bottom margins)
         $labelLength = $height;
 
-        $zpl = "^XA\n";
-        $zpl .= ($this->directThermal ? "^MTD\n" : "^MTT\n");
-        $zpl .= "^MD{$this->darkness}\n";
-        $zpl .= "^PW{$this->pageWidthDots}\n";
-        $zpl .= "^LL{$labelLength}\n";
-        $zpl .= "^PR8\n";  // Print speed 8 inches/sec (maximum speed)
-        $zpl .= "^FO0,0\n";  // No margins - start at 0,0
-        $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}\n";
-        $zpl .= "^FS\n";
-        $zpl .= "^XZ\n";
+        $zpl = "^XA";
+        $zpl .= ($this->directThermal ? "^MTD" : "^MTT");
+        $zpl .= "^MD{$this->darkness}";
+        $zpl .= "^PW{$this->pageWidthDots}";
+        $zpl .= "^LL{$labelLength}";
+        $zpl .= "^PR8";  // Print speed 8 inches/sec (maximum speed)
+        $zpl .= "^FO0,0";  // No margins - start at 0,0
+        $zpl .= "^GFA,{$totalBytes},{$totalBytes},{$bytesPerRow},{$hexData}";
+        $zpl .= "^FS";
+        $zpl .= "^XZ";
 
         return $zpl;
     }
